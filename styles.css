@@ -1,0 +1,56 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  background: #333;
+  font-family: consolas;
+  color: #eee;
+  font-size: 18px;
+}
+.game {
+  height: 100vh;
+}
+.title {
+  display: block;
+  text-align: center;
+  margin: 30px 0;
+}
+.deck {
+  margin: 50px auto;
+  width: 360px;
+  height: 360px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.cell {
+  width: 40px;
+  height: 40px;
+  background: #444;
+  border: 1px solid #555;
+  border-collapse: collapse;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 23px;
+  transition: all .2s ease-out;
+}
+.cell:hover {
+  background: #4b4b4b;
+}
+.focused {
+  background: rgba(128, 0, 9, 0.1);
+}
+.focused:hover {
+  background: rgba(160, 0, 8, 0.1);
+}
+.focused-primary {
+  background: rgba(128, 0, 9, 0.5);
+}
+.focused-primary:hover {
+  background: rgba(160, 0, 8, 0.5);
+}
+.R3, .R6 { border-bottom: 2px solid #666 }
+.C3, .C6 { border-right: 2px solid #666 }
