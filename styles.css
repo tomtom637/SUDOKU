@@ -35,16 +35,16 @@ body {
   align-items: center;
   font-weight: bold;
   font-size: 23px;
-  transition: all .2s ease-out;
+  transition: all 0.2s ease-out;
 }
 .cell:hover {
-  background: #4b4b4b;
+  background: #555;
 }
 .focused {
-  background: rgba(128, 0, 9, 0.1);
+  background: rgba(0, 153, 255, 0.15);
 }
 .focused:hover {
-  background: rgba(160, 0, 8, 0.1);
+  background: rgba(0, 153, 255, 0.3);
 }
 .focused-primary {
   background: rgba(128, 0, 9, 0.5);
@@ -52,5 +52,11 @@ body {
 .focused-primary:hover {
   background: rgba(160, 0, 8, 0.5);
 }
-.R3, .R6 { border-bottom: 2px solid #666 }
-.C3, .C6 { border-right: 2px solid #666 }
+.R3,
+.R6 {
+  border-bottom: 2px solid #999;
+}
+.C3,
+.C6 {
+  border-right: 2px solid #999;
+}
