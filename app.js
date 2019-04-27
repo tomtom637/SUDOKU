@@ -71,40 +71,38 @@ for (let i = 1; i < 82; i++) {
 function populate() {
   // deck.forEach  => cell
   deck.forEach(cell => {
-    // save the cell's location info into variables
-    let cellRow = cell.row;
-    let cellColumn = cell.column;
-    let cellArea = cell.area;
     // make an array "availableValues" of values from 1 to 9
     let availableValues = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-    // filter to make an array "rowValues" of the same row cells numValues
-    let rowValues = deck.filter(value => {
-      value.row === cellRow;
-    });
-    // filter to make an array "columnValues" of the same column cells numValues
-    let columnValues = deck.filter(value => {
-      value.column === cellColumn;
-    });
-    // filter to make an array "areaValues" of the same area cells numValues
-    let areaValues = deck.filter(value => {
-      value.area === cellArea;
-    });
-    // concat those 3 arrays to a new "commitedValues" array ----> commitedValues = [...rowValues, ...columnValues, ...areaValues]
-    let commitedValues = [...rowValues, ...columnValues, ...areaValues];
+
+    // self explenatory =>>
+    let numValuesAlreadyTaken = [];
+
+    deck
+      .filter(deckCell => deckCell.row === cell.row)
+      .forEach(rowCell => numValuesAlreadyTaken.push(rowCell.numValue));
+
+    deck
+      .filter(deckCell => deckCell.column === cell.column)
+      .forEach(columnCell => numValuesAlreadyTaken.push(columnCell.numValue));
+
+    deck
+      .filter(deckCell => deckCell.area === cell.area)
+      .forEach(areaCell => numValuesAlreadyTaken.push(areaCell.numValue));
+
     // for 9 turns =>
     for (let i = 0; i < 9; i++) {
-      // give the current cell one of the array values randomly
-      cell.numValue =
+      // give the current cell one of the available values randomly
+      pickedNum =
         availableValues[Math.floor(Math.random() * availableValues.length)];
       // remove that value from the "availableValues" array
-      let chosenNum = availableValues.indexOf(cell.numValue);
-      if (chosenNum > -1) {
-        availableValues.splice(chosenNum, 1);
-      }
-      // check if the "commitedValues" array includes the attributed numValue
-      // if it doesn't, return
-      if (commitedValues.includes(chosenNum) === false) {
-        cell.numValue = chosenNum;
+      let pickedNumPosition = availableValues.indexOf(pickedNum);
+
+      availableValues.splice(pickedNumPosition, 1);
+
+      // check if the "numValuesAlreadyTaken" array includes the attributed numValue
+      // if it doesn't, pick that new value and exit the loop
+      if (numValuesAlreadyTaken.includes(pickedNum) === false) {
+        cell.numValue = pickedNum;
         i = 9;
       }
     }
