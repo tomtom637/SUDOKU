@@ -103,11 +103,10 @@ function populate() {
     availableValues.splice(pickedNum - 1, 1);
 
     // check if the "numValuesAlreadyTaken" array includes the attributed numValue
-    // if it doesn't, pick that new value and exit the loop
     if (numValuesAlreadyTaken.includes(pickedNum) === false) {
       cell.numValue = pickedNum;
     } else {
-      // if no value can be given
+      // if no value can be given, we reload the population
       if (cell.numValue === 0) {
         populate();
       }
