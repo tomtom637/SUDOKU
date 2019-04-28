@@ -1,7 +1,10 @@
-// we want to put cells in our deck following the design.png diagram
+// we want to put cells in our grid following the design.png diagram
 
-// we initialize our deck array
-const deck = [];
+// we initialize our grid array
+const grid = [];
+
+// We want to log the number of reloads our Generator needed to succeed
+let reloads = 0;
 
 // we initialize our location-values
 let rowValue;
@@ -56,7 +59,7 @@ for (let i = 1; i < 82; i++) {
   areaValue = `A${areaValueNum}`;
 
   // we then build our cell with those values along with other properties
-  deck.push({
+  grid.push({
     id: i,
     row: rowValue,
     column: columnValue,
@@ -68,47 +71,53 @@ for (let i = 1; i < 82; i++) {
   });
 }
 
+// We want to populate our SUDOKU grid with values following the game's rules
 function populate() {
-  // deck.forEach  => cell
-  deck.forEach(cell => {
+  // we increment the reload counter by 1
+  reloads += 1;
+
+  grid.forEach(cell => {
     // make an array "availableValues" of values from 1 to 9
     let availableValues = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
     // self explenatory =>>
     let numValuesAlreadyTaken = [];
 
-    deck
-      .filter(deckCell => deckCell.row === cell.row)
+    grid
+      .filter(gridCell => gridCell.row === cell.row)
       .forEach(rowCell => numValuesAlreadyTaken.push(rowCell.numValue));
 
-    deck
-      .filter(deckCell => deckCell.column === cell.column)
+    grid
+      .filter(gridCell => gridCell.column === cell.column)
       .forEach(columnCell => numValuesAlreadyTaken.push(columnCell.numValue));
 
-    deck
-      .filter(deckCell => deckCell.area === cell.area)
+    grid
+      .filter(gridCell => gridCell.area === cell.area)
       .forEach(areaCell => numValuesAlreadyTaken.push(areaCell.numValue));
 
-    // for 9 turns =>
-    for (let i = 0; i < 9; i++) {
-      // give the current cell one of the available values randomly
-      pickedNum =
-        availableValues[Math.floor(Math.random() * availableValues.length)];
-      // remove that value from the "availableValues" array
-      let pickedNumPosition = availableValues.indexOf(pickedNum);
+    // give the current cell one of the available values randomly
+    pickedNum =
+      availableValues[Math.floor(Math.random() * availableValues.length)];
 
-      availableValues.splice(pickedNumPosition, 1);
+    // remove that value from the "availableValues" array
+    availableValues.splice(pickedNum - 1, 1);
 
-      // check if the "numValuesAlreadyTaken" array includes the attributed numValue
-      // if it doesn't, pick that new value and exit the loop
-      if (numValuesAlreadyTaken.includes(pickedNum) === false) {
-        cell.numValue = pickedNum;
-        i = 9;
+    // check if the "numValuesAlreadyTaken" array includes the attributed numValue
+    // if it doesn't, pick that new value and exit the loop
+    if (numValuesAlreadyTaken.includes(pickedNum) === false) {
+      cell.numValue = pickedNum;
+    } else {
+      // if no value can be given
+      if (cell.numValue === 0) {
+        populate();
       }
     }
   });
 }
 populate();
+
+// we log the total reloads that were needed to get it right
+console.log(`${reloads} reloads were needed to get it right`);
 
 // we make the view for our Sudoku
 const app = document.getElementById("app");
@@ -116,10 +125,10 @@ const app = document.getElementById("app");
 function setFocus(e) {
   e.target.classList.add("focused-primary");
   let cell_id = e.target.id;
-  deck.forEach(cell => (cell.onFocus = false));
-  let focusedRow = deck[cell_id - 1].row;
-  let focusedColumn = deck[cell_id - 1].column;
-  deck.forEach(cell => {
+  grid.forEach(cell => (cell.onFocus = false));
+  let focusedRow = grid[cell_id - 1].row;
+  let focusedColumn = grid[cell_id - 1].column;
+  grid.forEach(cell => {
     cell.row === focusedRow ? (cell.onFocus = true) : "";
     cell.column === focusedColumn ? (cell.onFocus = true) : "";
   });
@@ -130,7 +139,7 @@ function draw() {
   app.innerHTML = ``;
   app.innerHTML = `
     <div class="deck">
-      ${deck
+      ${grid
         .map(
           cell => `
         <div
