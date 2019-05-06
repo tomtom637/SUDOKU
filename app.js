@@ -124,7 +124,6 @@ function populate() {
 populate();
 
 // we log the total reloads that were needed to get it right
-console.log("THIS IS A WIN!");
 console.log(`${reloads} reloads were needed to get it right`);
 
 // we make the view for our Sudoku
