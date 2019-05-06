@@ -73,9 +73,6 @@ for (let i = 1; i < 82; i++) {
 
 // We want to populate our SUDOKU grid with values following the game's rules
 function populate() {
-  // we increment the reload counter by 1
-  reloads += 1;
-
   grid.forEach(cell => {
     // make an array "availableValues" of values from 1 to 9
     let availableValues = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -96,26 +93,38 @@ function populate() {
       .forEach(areaCell => numValuesAlreadyTaken.push(areaCell.numValue));
 
     // give the current cell one of the available values randomly
-    pickedNum =
+    let pickedNum =
       availableValues[Math.floor(Math.random() * availableValues.length)];
 
     // remove that value from the "availableValues" array
-    availableValues.splice(pickedNum - 1, 1);
+    availableValues.splice(availableValues.indexOf(pickedNum), 1);
 
-    // check if the "numValuesAlreadyTaken" array includes the attributed numValue
-    if (numValuesAlreadyTaken.includes(pickedNum) === false) {
-      cell.numValue = pickedNum;
-    } else {
-      // if no value can be given, we reload the population
-      if (cell.numValue === 0) {
-        populate();
+    function checkForValue() {
+      if (numValuesAlreadyTaken.includes(pickedNum)) {
+        pickedNum =
+          availableValues[Math.floor(Math.random() * availableValues.length)];
+        if (pickedNum !== 0) {
+          availableValues.splice(availableValues.indexOf(pickedNum), 1);
+        }
+      } else {
+        cell.numValue = pickedNum;
       }
+    }
+    checkForValue();
+    while (cell.numValue === 0 && availableValues.length > 0) {
+      checkForValue();
+    }
+    if (cell.numValue === 0) {
+      reloads += 1;
+      populate();
     }
   });
 }
+
 populate();
 
 // we log the total reloads that were needed to get it right
+console.log("THIS IS A WIN!");
 console.log(`${reloads} reloads were needed to get it right`);
 
 // we make the view for our Sudoku
